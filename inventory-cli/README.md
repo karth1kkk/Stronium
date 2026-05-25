@@ -4,12 +4,147 @@ A command-line inventory system for a small online store. Built with **Node.js**
 
 ## Setup & run
 
+From your terminal:
+
 ```bash
 cd inventory-cli
 npm start
 ```
 
 Run from the `inventory-cli` folder so `incoming_stock.csv` and `inventory.json` resolve correctly.
+
+## Example session (what you type)
+
+Below is a full walkthrough — each line after a prompt is **your input**.
+
+### Start the app
+
+```bash
+cd inventory-cli
+npm start
+```
+
+```text
+Inventory loaded.
+
+--- Inventory Management ---
+1. Add product
+2. View all products
+3. Update quantity
+4. Import from CSV
+5. Exit
+
+Choose (1-5):
+```
+
+### Add a product
+
+```text
+1
+SKU-100
+Wireless Headphones
+25
+```
+
+```text
+Added SKU-100.
+
+--- Inventory Management ---
+...
+Choose (1-5):
+```
+
+### View all products
+
+```text
+2
+```
+
+```text
+ID          Name                          Qty
+--------------------------------------------------
+SKU-100     Wireless Headphones           25
+
+--- Inventory Management ---
+...
+Choose (1-5):
+```
+
+### Update quantity
+
+```text
+3
+SKU-100
+30
+```
+
+```text
+Updated SKU-100 → qty 30.
+
+--- Inventory Management ---
+...
+Choose (1-5):
+```
+
+### Import CSV (default file)
+
+Press Enter at the path prompt to use `incoming_stock.csv`:
+
+```text
+4
+
+```
+
+(import report prints here — summary, applied-by-product, skipped rows, warnings)
+
+### Exit and confirm data persists
+
+```text
+5
+```
+
+```text
+Goodbye!
+```
+
+Start again:
+
+```bash
+npm start
+```
+
+```text
+2
+```
+
+Your products should still be listed (`inventory.json` was saved on exit).
+
+### Error examples
+
+Duplicate SKU on add:
+
+```text
+1
+SKU-100
+Another Name
+10
+```
+
+```text
+Error: Product SKU-100 already exists.
+```
+
+Update unknown SKU:
+
+```text
+3
+SKU-999
+10
+```
+
+```text
+Error: Product SKU-999 not found.
+```
 
 ## Features
 
@@ -74,10 +209,18 @@ inventory-cli/
   inventory.json   # created at runtime (gitignored)
 ```
 
-## Manual test checklist
+## Quick test script
 
-- [ ] Add a product, list it, exit, run again — data still there  
-- [ ] Add duplicate SKU → error  
-- [ ] Update missing SKU → error  
-- [ ] Import `incoming_stock.csv` → read grouped report  
-- [ ] List products — expect 13 unique SKUs after a fresh import (with default skip rules)
+Copy/paste these choices in order after `npm start` (fresh `inventory.json`):
+
+```text
+4
+[press Enter for default CSV path]
+2
+5
+npm start
+2
+5
+```
+
+Then you should see **13 products** after the import (4 rows skipped in the report).

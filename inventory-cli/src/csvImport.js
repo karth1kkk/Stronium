@@ -2,8 +2,6 @@ import fs from "fs";
 import { normalizeId, isValidQuantity } from "./product.js";
 import { createProduct } from "./product.js";
 
-// ─── Step 1: richer report object ───────────────────────────────────────────
-
 export function createImportReport() {
   return {
     filePath: "",
@@ -34,8 +32,6 @@ function wasIdNormalized(rawSku, sku) {
   return raw && raw.toUpperCase() !== sku;
 }
 
-// ─── Step 2–5: import + tracking ────────────────────────────────────────────
-
 export function importFromCsv(inventory, filePath) {
   const report = createImportReport();
   report.filePath = filePath;
@@ -63,7 +59,7 @@ export function importFromCsv(inventory, filePath) {
       continue;
     }
 
-    // Step 4: warning — ID normalized (e.g. sku-002 → SKU-002)
+    // Warn when raw SKU differs from normalized form (e.g. sku-002 → SKU-002)
     if (wasIdNormalized(rawSku, sku)) {
       report.warnings.push({
         line: lineNo,
@@ -87,7 +83,7 @@ export function importFromCsv(inventory, filePath) {
     if (existing) {
       const previousQty = existing.quantity;
 
-      // Step 4: warning — duplicate row / update
+      // Warn on duplicate SKU rows in the file
       if (previousQty === qty) {
         report.warnings.push({
           line: lineNo,
@@ -102,7 +98,7 @@ export function importFromCsv(inventory, filePath) {
         });
       }
 
-      // Step 4: warning — name in file differs from inventory (name not changed)
+      // Warn when CSV name differs from stored name (name is not overwritten)
       if (nameTrimmed && nameTrimmed !== existing.name) {
         report.warnings.push({
           line: lineNo,
@@ -149,8 +145,6 @@ export function importFromCsv(inventory, filePath) {
 
   return report;
 }
-
-// ─── Step 2–3–5: presentable report output ──────────────────────────────────
 
 export function formatImportReport(report, filePath) {
   const uniqueSkus = new Set(report.appliedRows.map((r) => r.sku)).size;
@@ -213,7 +207,6 @@ export function formatImportReport(report, filePath) {
     }
   }
 
-  // Step 5: skipped table
   lines.push("Skipped rows");
   lines.push("──────────────────────────────────────────────────────────────");
 
@@ -233,7 +226,6 @@ export function formatImportReport(report, filePath) {
     }
   }
 
-  // Step 4: warnings section
   lines.push("");
   lines.push("Warnings (informational)");
   lines.push("──────────────────────────────────────────────────────────────");
