@@ -1,19 +1,13 @@
 {
   "name": "inventory-cli",
   "version": "1.0.0",
-  "description": "Inventory management CLI and web app",
+  "description": "CLI inventory management system",
   "main": "src/cli.js",
   "scripts": {
-    "start": "node src/cli.js",
-    "web": "node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/cli.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
-  "dependencies": {
-    "@vercel/kv": "^3.0.0",
-    "express": "^5.1.0"
-  }
+  "type": "module"
 }

@@ -1,6 +1,6 @@
 import readline from "readline";
 import path from "path";
-import { createInventory, addProduct, listProducts, updateQuantity} from "./inventory.js";
+import { addProduct, listProducts, updateQuantity } from "./inventory.js";
 import { loadInventory, saveInventory } from "./storage.js";
 import {importFromCsv, formatImportReport } from "./csvImport.js";
 
